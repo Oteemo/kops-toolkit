@@ -1,0 +1,31 @@
+language: ruby
+
+rvm:
+- 2.5
+
+sudo: required
+
+services: docker
+
+env:
+  global:
+  - secure: UoOh4VFbg75InA+iQqSkDbYB7dZHf/uJpm9sk78YE/hwkmCJXmw5SYuN3pHr2EyyR+o7fyp1D3rbcsPzcJ8BmtQikk7D61PeV/Tt8GjOrIH3J3TJMAZ0jCu+m2bKzPbrxeIysK/gGT4zFv9LDSkgK5AptftEqII3/lSEWrBI4K+JDGYCZlYApNCcPElUjhl4qQzJv0xRqtmmmIv1JOI5PgfAN/2/EBeL1JNCb7/kFRHDBTu0yhKV1uJeH4EivSCdFOC1ppm+PYpar9Qvskfgk0KEiZIDlBYPGpnMWyqbP7mwawz3tK0QOssqco1CFKht2NUPUb0UxSQVE5Xc9rhRr99opXT1pLLyHDkTiKpdKkgQut84ZF5+YSZL+TL/uHprY4JE1PfEJtDWmh3eG+Jjn04j24+fkvsCzf5WWVnU+ncsmZ89xIX/PsKzkRq1XsoDb7yiJZcQUQei+h60/7nlhx8GoJEe/j1OntrGKgWcF+hJ3D8Dqk3jZUB9iRewGuxs5fby1h7ul7iGTBJxRoQcS9Jj1q3VgxPVUGjhP41KKWogblcgHdlW0UO7+Gbizc111GiYK2bXFnMOM0+J9PHQ9yi5/zslL0vZ1hq4foeV4xGtaS8262CY294KXnbxMXdYT8P0mB9Xbdq8z4NbiyEdqMV/8G1eIW1WnHlrkHYkA+E=
+  - secure: b9rv8tr+B+jv7hdk5qZYlmOd8pm4tRnZYRBEPZjYvYrVdoNBfacpz9Pxrbrem5L9QNH9jEVUyG3dnOawKXs6iNnD+p3wf5iK95KIHEd3bclHcSbX1owus1N7TC8W34x3xyjc5Rq5b4Enb2jMfIaxKeD02rBfByS44SwC7EH5ctHLmriwV6pFI9oiIfZ6vMcGs+MNFHK/WyAO8otpCsKZJ5tvXCMfFz8a89GFktJz/RPknvUvDVK2xzyribt3in0mWUeI1WNjqyizxW3ET/QsLpXhfa2rFXmGn7XcDyQmZv/hLvOW5SvMxBN09G61VEfWsDa/iHzoBS9EfKpk4IbtSEslREsjvEiQ7T8jRketHECC/kwLYWnITCro+RWsdhnX3LHkO0hNl9y1I3EXzeIkkL8Q/dFRAY8SgFDt9wixwMESNcnjaz8P8VHB94oqa3jsKVrBLwwpHihXDcwH8CTsaNPkYjmselCTD4RxgKJDp6B/tC9HzYysCXaYda3XfGcuvh86u0YZMJBOepovNCROFCra2gn2yl8qzk1Cb20WOthk3RuQ6zCDDTn31oKfCtKiHj2Q4Al5Z7gN/h2dgS4O9lI9tmGc4Hh608rw6qywUqy5oO03oES4cjas14NTEMpkUs/6DQ0IURzrW/GAGOPYUjyAOxVNmFsYJ/m8ees9yas=
+  - secure: rp+FtDTOL7eYk42eGUC7VsiRM24Lgmhfja+bccZFnYP2OLfBOsEseqO50WNpQfWg1qeAqPWWNtKe20VrAsmARBLAjWG24Snq27uGUmXLbcjRSrwwq1VRfUo/wLYD9UlmLWurcP5BUrHjBkfuSeTFwFIC+mwlxqjnKbwYGXDKbItp+38veTTlHKpK+q0SttNsFR/2YwrvQj/X2vFeQgSOtSbhdRWYj8srL/gpevKK/PjY/vzDrOiQNJC9AS/xQ1JpSVd7lwdlCZzkwFwNzk/6SE4tNIeh8Ud7IbfXTMv3OlyrXQ6nXM9Xkx5hsYBypXmMbURsU35+L85/FOfNyO3BOuY1QBuSuGcmcLHv3jcKil84Hk/z+z3p2f1mk6iDW+d+a/4I6S+J34W9yew+hG8wPCQG4yR5jGPc0R4ZdWBmebQFvof2WLwM6PEuHsvdgTnhzTp9U6ovNCSL6aU8WnZgTHcEKFJ0p3B4ZtWbO+7W9QxWAW3LbtWvOta/5CxzIMyxb7ZuE8yHE/tcjhGMxmD1bgr7p+5qDozamkenkTxtmQj8XY+Qh7XxpUoE6872aeAHkQASfApTvMfm6SHTkhVIBoPGweTxfiHPNKmnSF0mcWDsbIoXOHj97KY+jn+EUjhRDVnGdv5GIVbd4HSvSq+fY9PljmUAlw1s23hYthoCOW8=
+  - COMMIT=${TRAVIS_COMMIT::8}
+
+install:
+  - bundle install --path vendor/bundle
+
+script:
+  - bundle exec rspec
+
+
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=oteemo/kops-toolkit
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO

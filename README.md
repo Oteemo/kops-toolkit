@@ -7,4 +7,6 @@ Tools installed
 * helm
 * helmfile
 * terraform
+* cfssl
+
 
