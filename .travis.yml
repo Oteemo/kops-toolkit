@@ -20,7 +20,7 @@ script:
   - bundle exec rspec
 
 before_deploy:
-  - docker login -u "$DOCKER_USER" -P "$DOCKER_PASS"
+  - docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
 deploy:
   provider: script
   script:  bash .travis/deploy.sh
