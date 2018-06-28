@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
 export REPO=oteemo/kops-toolkit
 export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 docker build -f Dockerfile -t $REPO:$COMMIT .
