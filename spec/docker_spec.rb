@@ -16,7 +16,7 @@ describe 'My Dockerfile' do
       describe file('/usr/local/bin/kubectl') do
         it {should exist}
       end
-      describe command('/usr/local/bin/kubectl version -c') do
+      describe command('/usr/local/bin/kubectl version --client=true') do
         its(:exit_status) { should eq 0 }
       end
 
@@ -47,6 +47,10 @@ describe 'My Dockerfile' do
       describe command('/usr/local/bin/cfssl info --help') do
         # this will fail, but that is okay.  expected exit code is 2
         its(:exit_status) {should eq 2}
+      end
+
+      describe command('jq --version') do
+        its(:exit_status) {should be 0}
       end
     end
   end
