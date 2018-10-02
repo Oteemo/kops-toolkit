@@ -52,6 +52,10 @@ describe 'My Dockerfile' do
       describe command('jq --version') do
         its(:exit_status) {should be 0}
       end
+
+      describe command ('which bash') do
+        its(:exit_status) {should be 0}
+      end
     end
   end
 end
