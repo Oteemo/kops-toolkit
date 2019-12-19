@@ -59,9 +59,10 @@ describe 'My Dockerfile' do
       describe file('/usr/local/bin/argocd') do
         it {should exist}
       end
-      # describe command('/usr/local/bin/argocd version') do
-      #   its(:exit_status) {should eq 0}
-      # end
+
+      describe command('git version') do
+        its(:exit_status) {should eq 0}
+      end
 
       describe command('jq --version') do
         its(:exit_status) {should be 0}

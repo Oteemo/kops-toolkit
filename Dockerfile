@@ -1,7 +1,7 @@
 FROM alpine:3.10.3
 LABEL maintainer=sbrown@oteemo.com
 
-RUN apk add --no-cache curl unzip jq ca-certificates bash
+RUN apk add --no-cache curl unzip jq ca-certificates bash git
 
 RUN curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64 \
  && chmod +x kops \
