@@ -8,5 +8,7 @@ Tools installed
 * helmfile
 * terraform
 * cfssl
+* kustomize
+* argocd
 
 
