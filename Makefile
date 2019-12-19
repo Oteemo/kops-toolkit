@@ -5,4 +5,4 @@ test: bootstrap
 	bundle exec rspec
 
 build: bootstrap
-	docker build -tag oteemo:kops-toolkit --squash .
+	docker build --no-cache --tag oteemo:kops-toolkit --squash .

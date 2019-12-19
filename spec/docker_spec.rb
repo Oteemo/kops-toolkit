@@ -2,7 +2,7 @@ require 'dockerspec/serverspec'
 
 describe 'My Dockerfile' do
   describe docker_build('.') do
-    it { should have_label "maintainer" => 'gmead@oteemo.com' }
+    it { should have_label "maintainer" => 'sbrown@oteemo.com' }
 
     describe docker_run(described_image) do
 
@@ -48,6 +48,20 @@ describe 'My Dockerfile' do
         # this will fail, but that is okay.  expected exit code is 2
         its(:exit_status) {should eq 2}
       end
+
+      describe file('/usr/local/bin/kustomize') do
+        it {should exist}
+      end
+      describe command('/usr/local/bin/kustomize version') do
+        its(:exit_status) {should eq 0}
+      end
+
+      describe file('/usr/local/bin/argocd') do
+        it {should exist}
+      end
+      # describe command('/usr/local/bin/argocd version') do
+      #   its(:exit_status) {should eq 0}
+      # end
 
       describe command('jq --version') do
         its(:exit_status) {should be 0}

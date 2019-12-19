@@ -1,5 +1,5 @@
-FROM alpine:3.8
-LABEL maintainer=gmead@oteemo.com
+FROM alpine:3.10.3
+LABEL maintainer=sbrown@oteemo.com
 
 RUN apk add --no-cache curl unzip jq ca-certificates bash
 
@@ -28,5 +28,14 @@ RUN curl -Lo terraform.zip https://releases.hashicorp.com/terraform/0.11.7/terra
 RUN curl -Lo cfssl https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 \
  && chmod +x cfssl \
  && mv cfssl /usr/local/bin/cfssl
+
+RUN curl -Lo kustomize.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.5.3/kustomize_v3.5.3_linux_amd64.tar.gz \
+ && tar -xvf kustomize.tar.gz \
+ && chmod +x kustomize \
+ && mv kustomize /usr/local/bin/kustomize
+
+ RUN curl -Lo argocd https://github.com/argoproj/argo-cd/releases/download/v1.3.6/argocd-linux-amd64 \
+  && chmod +x argocd \
+  && mv argocd /usr/local/bin/argocd
 
 RUN rm -rf /var/cache/apk/*
