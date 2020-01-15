@@ -71,6 +71,13 @@ describe 'My Dockerfile' do
       describe command ('which bash') do
         its(:exit_status) {should be 0}
       end
+
+      describe file('/usr/local/bin/conftest') do
+        it {should exist}
+      end
+      describe command('/usr/local/bin/conftest --version') do
+        its(:exit_status) {should eq 0}
+      end
     end
   end
 end

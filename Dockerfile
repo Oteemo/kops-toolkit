@@ -38,4 +38,9 @@ RUN curl -Lo kustomize.tar.gz https://github.com/kubernetes-sigs/kustomize/relea
   && chmod +x argocd \
   && mv argocd /usr/local/bin/argocd
 
+RUN curl -Lo conftest.tar.gz https://github.com/instrumenta/conftest/releases/download/v0.16.0/conftest_0.16.0_Linux_x86_64.tar.gz \
+ && tar -xvf conftest.tar.gz \
+ && chmod +x conftest \
+ && mv conftest /usr/local/bin/conftest
+
 RUN rm -rf /var/cache/apk/*
